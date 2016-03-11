@@ -73,7 +73,7 @@ BUILD_KERNEL()
 	echo "Creating kernel config..."
 	cd $RDIR
 	mkdir -p build
-	make -C $RDIR O=build $DEFCONFIG \
+	make -C $RDIR $DEFCONFIG \
 		VARIANT_DEFCONFIG=$VARIANT_DEFCONFIG
 	echo "Starting build for ${TARGET}-${DEVICE}-${LOCALVERSION}..."
 	make -C $RDIR -j"$THREADS"

@@ -12,10 +12,10 @@ export ARCH=arm64
 export CROSS_COMPILE=$TOOLCHAIN/bin/aarch64-linux-android-
 
 RDIR=$(pwd)
-OUTDIR=$RDIR/build/arch/$ARCH/boot
+OUTDIR=$RDIR/arch/$ARCH/boot
 DTSDIR=$RDIR/arch/$ARCH/boot/dts
-DTBDIR=$OUTDIR/dts
-DTCTOOL=$RDIR/build/scripts/dtc/dtc
+DTBDIR=$OUTDIR/dtb
+DTCTOOL=$RDIR/scripts/dtc/dtc
 INCDIR=$RDIR/include
 
 [ -f "$DTCTOOL" ] || {
