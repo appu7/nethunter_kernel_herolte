@@ -452,8 +452,8 @@ static int f2fs_file_open(struct inode *inode, struct file *filp)
 			return -ENOKEY;
 	}
 	dir = dget_parent(filp->f_path.dentry);
-	if (f2fs_encrypted_inode(d_inode(dir)) &&
-			!fscrypt_has_permitted_context(d_inode(dir), inode)) {
+	if (f2fs_encrypted_inode(dir->d_inode) &&
+			!fscrypt_has_permitted_context(dir->d_inode, inode)) {
 		dput(dir);
 		return -EPERM;
 	}
