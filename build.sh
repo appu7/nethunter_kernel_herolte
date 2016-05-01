@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stock Samsung kernel for Samsung Galaxy S7 build script by jcadduono
+# NetHunter kernel for Samsung Galaxy S7 build script by jcadduono
 
 ################### BEFORE STARTING ################
 #
@@ -39,7 +39,7 @@ export ARCH=arm64
 export CROSS_COMPILE=$TOOLCHAIN/bin/aarch64-linux-gnu-
 
 [ "$DEVICE" ] || DEVICE=herolte
-[ "$TARGET" ] || TARGET=samsung
+[ "$TARGET" ] || TARGET=nethunter
 [ "$1" ] && VARIANT=$1
 [ "$VARIANT" ] || VARIANT=xx
 
