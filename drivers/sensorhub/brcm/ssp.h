@@ -653,7 +653,7 @@ struct ssp_data {
 	struct work_struct work_bbd_on_packet;
 	struct workqueue_struct *bbd_mcu_ready_wq;
 	struct work_struct work_bbd_mcu_ready;
-
+	
 #if defined(CONFIG_SSP_MOTOR)
 	struct workqueue_struct *ssp_motor_wq;
 	struct work_struct work_ssp_motor;

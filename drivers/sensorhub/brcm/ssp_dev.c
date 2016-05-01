@@ -510,6 +510,7 @@ int ssp_motor_callback(int state)
 	int iRet = 0;
 	
 	ssp_data_info->motor_state = state;
+	iRet = send_motor_state(ssp_data_info);
 
 	queue_work(ssp_data_info->ssp_motor_wq,
 			&ssp_data_info->work_ssp_motor);
@@ -804,13 +805,6 @@ static void ssp_shutdown(struct spi_device *spi)
 #endif
 	data->bbd_on_packet_wq = NULL;
 	data->bbd_mcu_ready_wq = NULL;
-
-#ifdef CONFIG_SSP_MOTOR
-	cancel_work_sync(&data->work_ssp_motor);
-	destroy_workqueue(data->ssp_motor_wq);
-
-	data->ssp_motor_wq = NULL;
-#endif
 
 	mutex_unlock(&shutdown_lock);
 

@@ -229,6 +229,8 @@ struct sec_battery_info {
 
 	/* wireless charging enable */
 	int wc_enable;
+	int wc_enable_cnt;
+	int wc_enable_cnt_value;
 	int wc_status;
 	bool wc_cv_mode;
 	bool wc_pack_max_curr;
@@ -371,6 +373,7 @@ enum {
 	WC_STATUS,
 	WC_ENABLE,
 	WC_CONTROL,
+	WC_CONTROL_CNT,
 	HV_CHARGER_STATUS,
 	HV_WC_CHARGER_STATUS,
 	HV_CHARGER_SET,

@@ -3473,7 +3473,12 @@ restart:
 			sk->sk_err = ETIMEDOUT;
 			sk->sk_error_report(sk);
 
-			tcp_done(sk);
+#ifdef CONFIG_MPTCP
+			if (!sock_owned_by_user(sk) &&
+			    sk->sk_state != TCP_CLOSE)
+#endif
+				tcp_done(sk);
+
 			bh_unlock_sock(sk);
 			local_bh_enable();
 			sock_put(sk);
