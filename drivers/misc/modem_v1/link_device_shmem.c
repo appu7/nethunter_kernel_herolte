@@ -33,7 +33,6 @@
 
 #include <linux/shm_ipc.h>
 #include <linux/mcu_ipc.h>
-#include <linux/exynos-pci-ctrl.h>
 
 #include "modem_prj.h"
 #include "modem_utils.h"
@@ -2173,25 +2172,6 @@ static void shmem_cp2ap_wakelock_handler(void *data)
 	}
 }
 
-static void shmem_cp2ap_pcie_l1ss_disable_handler(void *data)
-{
-	struct mem_link_device *mld = (struct mem_link_device *)data;
-	unsigned int req;
-	mif_err("%s\n", __func__);
-
-	req = mbox_get_value(mld->mbx_cp2ap_pcie_l1ss_disable);
-
-	if (req == 1) {
-		exynos_pcie_l1ss_ctrl(0, PCIE_L1SS_CTRL_MODEM_IF);
-		mif_err("cp requests pcie l1ss disable\n");
-	} else if (req == 0) {
-		exynos_pcie_l1ss_ctrl(1, PCIE_L1SS_CTRL_MODEM_IF);
-		mif_err("cp requests pcie l1ss enable\n");
-	} else {
-		mif_err("unsupported request: pcie_l1ss_disable\n");
-	}
-}
-
 static void remap_4mb_map_to_ipc_dev(struct mem_link_device *mld)
 {
 	struct link_device *ld = &mld->link_dev;
@@ -2576,17 +2556,6 @@ struct link_device *shmem_create_link_device(struct platform_device *pdev)
 	if (err) {
 		mif_err("%s: ERR! mbox_request_irq(%u) fail (%d)\n",
 			ld->name, mld->irq_perf_req_int, err);
-		goto error;
-	}
-
-	mld->mbx_cp2ap_pcie_l1ss_disable = modem->mbx->mbx_cp2ap_pcie_l1ss_disable;
-	mld->irq_cp2ap_pcie_l1ss_disable = modem->mbx->irq_cp2ap_pcie_l1ss_disable;
-
-	err = mbox_request_irq(mld->irq_cp2ap_pcie_l1ss_disable,
-			shmem_cp2ap_pcie_l1ss_disable_handler, mld);
-	if (err) {
-		mif_err("%s: ERR! mbox_request_irq(%u) fail (%d)\n",
-			ld->name, mld->irq_cp2ap_pcie_l1ss_disable, err);
 		goto error;
 	}
 

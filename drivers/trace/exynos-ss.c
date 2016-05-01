@@ -1850,12 +1850,6 @@ static int __init exynos_ss_fixmap(void)
 
 	/* output the information of exynos-snapshot */
 	exynos_ss_output();
-
-#ifdef CONFIG_SEC_DEBUG
-	sec_debug_save_last_kmsg(ess_items[ess_desc.log_kernel_num].head_ptr,
-				 ess_items[ess_desc.log_kernel_num].curr_ptr);
-#endif
-
 	return 0;
 }
 

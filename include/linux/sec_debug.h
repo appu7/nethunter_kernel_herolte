@@ -18,6 +18,7 @@
 extern int  sec_debug_init(void);
 extern void sec_debug_reboot_handler(void);
 extern void sec_debug_panic_handler(void *buf, bool dump);
+extern void sec_debug_set_abnormal_cause(void *buf);
 extern void sec_debug_check_crash_key(unsigned int code, int value);
 
 extern int  sec_debug_get_debug_level(void);
@@ -32,6 +33,7 @@ extern void sec_gaf_supply_rqinfo(unsigned short curr_offset, unsigned short rq_
 #define sec_debug_init()			(-1)
 #define sec_debug_reboot_handler()		do { } while(0)
 #define sec_debug_panic_handler(a,b)		do { } while(0)
+#define sec_debug_set_abnormal_cause(a)		do { } while(0)
 #define sec_debug_check_crash_key(a,b)		do { } while(0)
 
 #define sec_debug_get_debug_level()		0
@@ -88,12 +90,6 @@ enum sec_debug_upload_cause_t {
 
 extern void sec_initcall_debug_add(initcall_t fn,
 	unsigned long long duration);
-#endif
-
-#ifdef CONFIG_SEC_DEBUG_LAST_KMSG
-extern void sec_debug_save_last_kmsg(unsigned char* head_ptr, unsigned char* curr_ptr);
-#else
-#define sec_debug_save_last_kmsg(a, b)		do { } while(0)
 #endif
 
 #ifdef CONFIG_SEC_PARAM

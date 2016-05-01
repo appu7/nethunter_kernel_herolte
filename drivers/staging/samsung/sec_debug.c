@@ -196,12 +196,11 @@ int __init sec_debug_init(void)
 	size_t size = SZ_4K;
 	size_t base = SEC_DEBUG_MAGIC_PA;
 
-/* 
+
 	if (!sec_debug_level.en.kernel_fault) {
 		pr_info("sec_debug: disabled due to debug level (0x%x)\n", sec_debug_level.uint_val);
 		return -1;
 	}
-*/
 
 #ifdef CONFIG_NO_BOOTMEM
 	if (!memblock_is_region_reserved(base, size) &&
@@ -495,6 +494,22 @@ void sec_debug_reboot_handler()
 {
 	/* Clear magic code in normal reboot */
 	sec_debug_set_upload_magic(UPLOAD_MAGIC_INIT, NULL);
+}
+
+void sec_debug_set_abnormal_cause(void *buf)
+{
+	/* Set upload cause */
+	sec_debug_set_upload_magic(UPLOAD_MAGIC_PANIC, buf);
+	if (!strcmp(buf, "User Fault"))
+		sec_debug_set_upload_cause(UPLOAD_CAUSE_USER_FAULT);
+	else if (!strcmp(buf, "Crash Key"))
+		sec_debug_set_upload_cause(UPLOAD_CAUSE_FORCED_UPLOAD);
+	else if (!strncmp(buf, "CP Crash", 8))
+		sec_debug_set_upload_cause(UPLOAD_CAUSE_CP_ERROR_FATAL);
+	else if (!strcmp(buf, "HSIC Disconnected"))
+		sec_debug_set_upload_cause(UPLOAD_CAUSE_HSIC_DISCONNECTED);
+	else
+		sec_debug_set_upload_cause(UPLOAD_CAUSE_KERNEL_PANIC);
 }
 
 void sec_debug_panic_handler(void *buf, bool dump)
