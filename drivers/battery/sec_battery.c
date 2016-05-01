@@ -165,6 +165,7 @@ static struct device_attribute sec_battery_attrs[] = {
 	SEC_BATTERY_ATTR(batt_update_data),
 #endif
 	SEC_BATTERY_ATTR(batt_misc_event),
+	SEC_BATTERY_ATTR(batt_ext_dev_chg),
 };
 
 static enum power_supply_property sec_battery_props[] = {
@@ -4635,6 +4636,8 @@ ssize_t sec_bat_show_attrs(struct device *dev,
 		i += scnprintf(buf + i, PAGE_SIZE - i, "%d\n",
 				battery->misc_event);
 		break;
+	case BATT_EXT_DEV_CHG:
+		break;
 	default:
 		i = -EINVAL;
 		break;
@@ -5573,6 +5576,37 @@ ssize_t sec_bat_store_attrs(
 		break;
 #endif
 	case BATT_MISC_EVENT:
+		break;
+	case BATT_EXT_DEV_CHG:
+		if (sscanf(buf, "%d\n", &x) == 1) {
+			union power_supply_propval value;
+			pr_info("%s: Connect Ext Device : %d ",__func__, x);
+
+			switch (x) {
+				case EXT_DEV_NONE:
+					battery->wire_status = POWER_SUPPLY_TYPE_BATTERY;
+					value.intval = 0;
+					break;
+				case EXT_DEV_GAMEPAD_CHG:
+					battery->wire_status = POWER_SUPPLY_TYPE_MAINS;
+					value.intval = 0;
+					break;
+				case EXT_DEV_GAMEPAD_OTG:
+					battery->wire_status = POWER_SUPPLY_TYPE_OTG;
+					value.intval = 1;
+					break;
+				default:
+					break;
+			}
+
+			psy_do_property(battery->pdata->charger_name, set,
+					POWER_SUPPLY_PROP_CHARGE_OTG_CONTROL,
+					value);
+
+			queue_delayed_work_on(0, battery->monitor_wqueue,
+					&battery->cable_work, 0);
+			ret = count;
+		}
 		break;
 	default:
 		ret = -EINVAL;

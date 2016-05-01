@@ -464,6 +464,13 @@ enum {
 #endif
 
 	BATT_MISC_EVENT,
+	BATT_EXT_DEV_CHG,
+};
+
+enum {
+	EXT_DEV_NONE = 0,
+	EXT_DEV_GAMEPAD_CHG,
+	EXT_DEV_GAMEPAD_OTG,
 };
 
 #ifdef CONFIG_OF

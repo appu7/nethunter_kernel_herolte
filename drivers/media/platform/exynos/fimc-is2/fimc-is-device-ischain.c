@@ -34,6 +34,7 @@
 #include <linux/syscalls.h>
 #include <linux/bug.h>
 #include <linux/smc.h>
+#include <linux/exynos-pci-ctrl.h>
 
 #include <linux/regulator/consumer.h>
 #include <linux/pinctrl/consumer.h>
@@ -2236,6 +2237,7 @@ int fimc_is_ischain_runtime_suspend(struct device *dev)
 	exynos7_update_media_scenario(TYPE_CAM, false, 0);
 	/* Qurgent on */
 	bts_ext_scenario_set(TYPE_CAM, TYPE_URGENT_OFF, false);
+	exynos_pcie_l1ss_ctrl(1, PCIE_L1SS_CTRL_CAMERA);
 #endif
 
 	ret = pdata->clk_off(&pdev->dev);
@@ -2337,6 +2339,7 @@ int fimc_is_ischain_runtime_resume(struct device *dev)
 	exynos7_update_media_scenario(TYPE_CAM, true, 0);
 	/* Qurgent off */
 	bts_ext_scenario_set(TYPE_CAM, TYPE_URGENT_OFF, true);
+	exynos_pcie_l1ss_ctrl(0, PCIE_L1SS_CTRL_CAMERA);
 #endif
 
 p_err:

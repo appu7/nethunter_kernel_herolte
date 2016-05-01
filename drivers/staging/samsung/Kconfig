@@ -64,19 +64,19 @@ config SEC_AVC_LOG
 	help
 	  This option enables additional log buffer for audit log.
 
-config SEC_KSHOT_LOG
-	default n
-	bool "Enable kshot log support" if EMBEDDED
-	depends on SEC_EXT
-	help
-	  This option enables additional log buffer for bootloader/kernel log.
-
 config SEC_DEBUG_TSP_LOG
 	default n
 	bool "Enable tsp log support" if EMBEDDED
 	depends on SEC_EXT
 	help
 	  This option enables additional log buffer for tsp log.
+
+config SEC_DEBUG_LAST_KMSG
+	default y
+	bool "Enable /proc/last_kmsg support" if EMBEDDED
+	depends on SEC_DEBUG
+	help
+	  This option enables /proc/last_kmsg support.
 
 config SEC_FILE_LEAK_DEBUG
 	bool "Panic when file leak detected"

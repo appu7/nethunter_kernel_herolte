@@ -26,7 +26,6 @@
 #include <linux/exynos-ss.h>
 #include <asm/core_regs.h>
 #include "sched/sched.h"
-#include <linux/sec_debug.h>
 
 #define PANIC_TIMER_STEP 100
 #define PANIC_BLINK_SPD 18
@@ -149,10 +148,6 @@ void panic(const char *fmt, ...)
 	 * Run any panic handlers, including those that might need to
 	 * add information to the kmsg dump output.
 	 */
-
-	if(!sec_debug_get_debug_level())
-		sec_debug_set_abnormal_cause(buf);	
-	
 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
 
 	kmsg_dump(KMSG_DUMP_PANIC);
